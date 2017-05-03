@@ -1,0 +1,138 @@
+<div class="w3-container w3-blue-grey">
+  <h4 >{{hourEditPlaceholder}}</h4>
+</div>
+
+<form class="w3-container w3-text-blue-grey w3-margin" [formGroup]="hourEditForm" (change)="onFormChanges()" (ngSubmit)="onSubmit()" novalidate>
+
+  <label><b>Record Number: </b></label>
+
+    <div class="w3-border w3-text-black w3-padding" *ngIf="hourEditModel.RecordNo>0" ><label>{{hourEditForm.get('RecordNo').value}}</label> </div>
+    <div class="w3-border w3-text-black w3-padding" *ngIf="hourEditModel.RecordNo==0" ><label>(new record)</label></div>
+
+  <br/>
+
+  <label><b>Staff Name: </b></label>
+  <select class="w3-input w3-border" formControlName="GuardianID">
+    <option *ngFor="let staff of viewmodel.staffHeaderModels" [value]="staff.GuardianID">{{staff.GuardianName}}</option>
+    </select>
+  <br/>
+
+  <label><b>Location: </b></label>
+  <select class="w3-input w3-border" name ="_locations"  formControlName="LocationID">
+    <option *ngFor="let loc of locations"  [value]="loc.LocationID">{{loc.LocationName}}</option>
+  </select>
+  <div class="w3-khaki" *ngIf="hourEditForm.get('LocationID').invalid && !hourEditForm.pristine "> Please choose a location</div>
+  <br/><br/>
+
+  <div class="w3-row">
+    <div class="w3-third">
+      <label><b>Date Worked: </b></label>
+      <div class="w3-cell-row">
+        <div class="w3-cell" style="width: 125px">
+          <select class="w3-input w3-border" formControlName="DateMonth">
+            <option *ngFor="let month of months" [value]="month.k">{{month.v}}</option>
+          </select>
+        </div>
+        <div class="w3-cell" style="width: 75px">
+          <select name="_dayWorked" class="w3-input w3-border" formControlName="DateDay">
+            <option *ngFor="let day of days" [value]="day">{{day}} </option>
+          </select>
+        </div>
+        <div class="w3-cell" style="width: 75px">
+          <input  class="w3-input w3-border" [class.w3-yellow]="hourEditForm.get('DateYear').invalid" formControlName="DateYear">
+        </div>
+        <div class="w3-cell w3-rest">
+          <label>| <span class="w3-text-red" *ngIf="hourEditForm.get('DateYear').invalid"> Date is Invalid</span> </label>
+        </div>
+      </div>
+    </div>
+
+ <!--   <br />-->
+
+    <div class="w3-quarter">
+        <label><b>Time In:</b></label>
+
+        <div class="w3-cell-row">
+          <div class="w3-cell" style="width: 75px">
+            <select class="w3-input w3-border" name="_timeInHour"  formControlName="TimeInHour">
+              <option *ngFor="let hour of hours" [value]="hour">{{hour}}</option>
+            </select>
+          </div>
+          <div class="w3-cell" style="width: 75px">
+            <select class="w3-input w3-border" name="_timeInMinute"  formControlName="TimeInMinute">
+              <option *ngFor="let minute of minutes" [value]="minute">{{minute}}</option>
+            </select>
+          </div>
+          <div class="w3-cell" style="width: 75px">
+            <select class="w3-input w3-border" name="_timeInDayPart"  formControlName="TimeInDayPart">
+              <option *ngFor="let dayPart of dayParts" [value]="dayPart">{{dayPart}}</option>
+            </select>
+          </div>
+          <div class="w3-cell w3-rest">
+            <label>|  </label>
+          </div>
+        </div>
+    </div>
+      <!-- <br />-->
+
+    <div class="w3-quarter">
+      <label><b>Time Out:</b></label>
+      <div class="w3-cell-row">
+        <div class="w3-cell" style="width: 75px">
+          <select class="w3-input w3-border" name="_timeOutHour"  formControlName="TimeOutHour">
+            <option *ngFor="let hour of hours" [value]="hour">{{hour}}</option>
+          </select>
+        </div>
+        <div class="w3-cell" style="width: 75px">
+          <select class="w3-input w3-border" name="_timeOutMinute"  formControlName="TimeOutMinute">
+            <option *ngFor="let minute of minutes" [value]="minute">{{minute}}</option>
+          </select>
+        </div>
+        <div class="w3-cell" style="width: 75px">
+          <select class="w3-input w3-border" name="_timeOutDayPart"  formControlName="TimeOutDayPart">
+            <option *ngFor="let dayPart of dayParts" [value]="dayPart">{{dayPart}}</option>
+          </select>
+        </div>
+        <div class="w3-cell w3-rest">
+          <label>|  </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="w3-rest w3-hide-medium w3-hide-small">
+      <label ><b>Hours Worked</b></label>
+
+      <div class="w3-border w3-padding" [class.w3-khaki]="timeWorked < 0" ><label>{{timeWorked | number: '1.2-2'}} hours</label> </div>
+      <div class="w3-khaki" *ngIf="timeWorked < 0" ><label>Time worked less than zero!</label></div>
+    </div>
+
+  </div>
+  <div class="w3-khaki" *ngIf="failedRecordNumber > 0">
+    <p> Hours conflict with record number {{failedRecordNumber}}</p>
+  </div>
+  <div class="w3-khaki" *ngIf="isFutureDate">
+    <p> You may not enter hours in the future</p>
+  </div>
+  <div class="w3-khaki" *ngIf="isPriorToMinEditDate">
+    <p> Hours on or before {{viewmodel.minEditDate() | date:'shortDate'}} may be entered at the central office only</p>
+  </div>
+  <br/>
+  <label><b>Comment:</b></label>
+  <div>
+    <input class="w3-input w3-border" name="_comment" formControlName="Comment">
+  </div>
+
+
+  <br/>
+  <div w3-row>
+    <button class="w3-button w3-blue-grey" type="button" [disabled]="!hourEditForm.valid || timeWorked < 0 || failedRecordNumber > 0 || isFutureDate || isPriorToMinEditDate" (click)="onSubmit()" >Submit</button>
+    <!--<button class="w3-button w3-blue-grey" type="button" (click)="resetFailedValidation()" *ngIf="failedValidation" >Reset</button>-->
+    <button class="w3-button w3-blue-grey" type="button" (click)="navigateToHoursList()">Cancel</button>
+
+  </div>
+  <div *ngIf="false">
+    <p style="color: black">Form value: {{hourEditForm.value | json}}</p>
+    <p style="color: black">Form status: {{hourEditForm.status | json}}</p>
+  </div>
+</form>
+

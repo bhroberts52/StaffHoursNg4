@@ -1,0 +1,20 @@
+<div class="w3-container eds-header" >
+  <div class="w3-row">
+    <div class="w3-third">
+      <!--<img class="w3-left" style="height:40px; margin:10px" src="../images/edslogo.png"" />-->
+      <h4> {{name}} </h4>
+    </div>
+    <div class="w3-third w3-center">
+      <h4 *ngIf="viewmodel.staffHeaderView.GuardianID > 0">Logged in: {{viewmodel.staffHeaderView.GuardianName}} </h4>
+      <h6 *ngIf="viewmodel.staffHeaderView.PTOEnabled===true"> PTO Available: {{viewmodel.staffHeaderView.PTOBalance}} hours</h6>
+    </div>
+
+
+    <div class="w3-right w3-third">
+      <button class="w3-button w3-blue-grey w3-margin w3-right" type="button" (click)="onLogout()">Log Out</button>
+
+    </div>
+  </div>
+</div>
+
+  <router-outlet></router-outlet>

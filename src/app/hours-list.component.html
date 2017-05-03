@@ -1,0 +1,64 @@
+<div class="w3-container">
+
+  <form  [formGroup]="form" (change)="onFormChanges()" novalidate >
+    <div class="w3-margin">
+      <select class="w3-input w3-border w3-half w3-large w3-margin-bottom" formControlName="selectedGuardianID" >
+        <option *ngFor="let staff of viewmodel.staffHeaderModels" [value]="staff.GuardianID">{{staff.GuardianName}}</option>
+      </select>
+    </div>
+
+    <div class="w3-cell-row w3-margin">
+
+      <div class="w3-cell">
+          From:  <input type="date" formControlName="dateFrom" >
+          To:  <input type="date" formControlName="dateTo" >
+      </div>
+      <div class="w3-cell w3-hide-medium w3-hide-small w3-margin">  {{hourCount}} records, {{totalHours | number:'1.2-2'}} hours </div>
+
+      <div class="w3-container w3-cell w3-margin">
+        <button class="w3-button w3-blue-grey w3-right" (click)="addHour()">Create New Record...</button>
+      </div>
+
+    </div>
+
+  </form>
+
+
+
+</div>
+
+<div>
+  <table class="w3-table w3-striped w3-bordered">
+    <thead>
+      <tr class="w3-blue-grey">
+        <th class="w3-hide-small">RecordNo.</th>
+        <th>Date Worked </th>
+        <th class="w3-hide-medium w3-hide-small">Staff Name</th>
+        <th class="w3-hide-small">Location</th>
+        <th>Begin Time</th>
+        <th>End Time</th>
+        <th class="w3-hide-medium w3-hide-small">Hours Worked</th>
+        <th class="w3-hide-medium w3-hide-small">Paid?</th>
+        <th>Edit/Delete</th>
+        <th class="w3-hide-medium w3-hide-small" [class.w3-hide-large]="viewmodel.staffHeaderView.PermissionID===4">Modified</th>
+        <th class="w3-hide-medium w3-hide-small" [class.w3-hide-large]="viewmodel.staffHeaderView.PermissionID===4" >ModifiedBy</th>  
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let hour of listHours" (mouseover)="onSelectHour(hour)" [(class.w3-khaki)]="hour===selectedHour" >
+        <td class="w3-hide-small">{{hour.Hour.RecordNo}}</td>
+          <td>{{hour.Hour.DateWorked | date:'shortDate'}}</td>
+          <td class="w3-hide-medium w3-hide-small">{{hour.Hour.GuardianName}}</td>
+          <td class="w3-hide-small">{{hour.Hour.LocationName}}</td>
+          <td>{{hour.Hour.TimeIn}}</td>
+          <td>{{hour.Hour.TimeOut}}</td>
+          <td class="w3-hide-medium w3-hide-small">{{hour.Hour.TimeWorked | number:'1.2-2'}}</td>
+          <td class="w3-hide-medium w3-hide-small">{{hour.Hour.Paid}}</td>
+           <td><button type="button" class="w3-button w3-blue-grey" [disabled]="hour.IsDisabled" (click)="editHour(hour)"><i class="fa fa-pencil fa-lg"></i></button>
+          <button type="button" class="w3-button w3-blue-grey" [disabled]="hour.IsDisabled" (dblclick)="deleteHour(hour);$event.stopPropagation()"><i class="fa fa-close fa-lg"></i></button></td>
+          <td class="w3-hide-medium w3-hide-small" [class.w3-hide-large]="viewmodel.staffHeaderView.PermissionID===4">{{hour.Hour.ModifiedWhen | date:'short'}}</td>
+          <td class="w3-hide-medium w3-hide-small" [class.w3-hide-large]="viewmodel.staffHeaderView.PermissionID===4">{{hour.Hour.ModifiedByName}}</td>
+      </tr>
+    <tbody>
+  </table>
+</div>
