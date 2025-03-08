@@ -17,7 +17,7 @@ import {
 
 @Injectable()
 export class WebApiService {
-private baseUrl = 'http://staffhourswebapi2.azurewebsites.net/api/StaffHours';
+private baseUrl = 'https://staffhourswebapi2.azurewebsites.net/api/StaffHours';
 //private baseUrl = 'http://localhost:59312/api/StaffHours';
 
 
